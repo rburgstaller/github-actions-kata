@@ -13,7 +13,7 @@ electronTest("With only first number changed returns first number", async ({ pag
     const aInput = await (await page.getByTestId("number-a")).locator("input");
     await aInput.fill("3")
     const result = await page.getByTestId("result")
-    expect(await result.innerText()).toBe("3")
+    expect(await result.innerText()).toBe("4")
 });
 
 electronTest("With both numbers changed returns sum", async ({ page }) => {

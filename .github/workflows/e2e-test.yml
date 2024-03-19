@@ -1,0 +1,30 @@
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'desktop-app/src/**/*.ts'
+      - 'desktop-app/src/e2e/**'
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up node lts
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+          cache-dependency-path: 'desktop-app/package-lock.json'
+      - name: Install dependencies
+        run: cd desktop-app && npm install
+      - name: Run tests
+        run: cd desktop-app && xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run e2e
+      - name: Upload test results in case of failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: desktop-app/test-results/**
