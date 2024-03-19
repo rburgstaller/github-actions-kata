@@ -8,15 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: show context
-        run: |
-            echo "github.event_name ${{ github.event_name }}"
-            echo "github.event ${{ toJSON(github.event) }}"
       - name: list PR branches
         run: |
           echo "PR branch base ref: ${{ github.event.pull_request.base.ref }} head ref: ${{ github.event.pull_request.head.ref }}"
         if: github.event_name == 'pull_request'
       - name: list push branches
         run: |
-          echo "Push branch ref: ${{ github.ref }} commit: $env.GITHUB_SHA"
+          echo "Push branch ref: ${{ github.ref }} commit: $GITHUB_SHA"
         if: github.event_name == 'push'
+      - name: list files in repo
+        run: ls -laR
