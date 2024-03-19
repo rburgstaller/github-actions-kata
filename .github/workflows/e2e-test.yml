@@ -4,11 +4,11 @@ on:
       - main
     paths:
       - 'desktop-app/src/**/*.ts'
-      - '!desktop-app/src/e2e/**'
-jobs:
-  unit-tests:
-    runs-on: ubuntu-latest
+      - 'desktop-app/src/e2e/**'
 
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,4 +21,10 @@ jobs:
       - name: Install dependencies
         run: cd desktop-app && npm install
       - name: Run tests
-        run: cd desktop-app && npm test
+        run: cd desktop-app && npm e2e
+      - name: Upload test results in case of failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: desktop-app/test-results/**
