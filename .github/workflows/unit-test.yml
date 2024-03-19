@@ -14,6 +14,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'npm'
+          cache-dependency-path: 'desktop-app/package-lock.json'
       - name: Install dependencies
         run: cd desktop-app && npm install
       - name: Run tests
